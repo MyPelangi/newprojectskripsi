@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YOLOv9 Sepeda Detection</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; padding: 20px; }
+        form { margin-bottom: 20px; }
+        input, button { margin: 5px; padding: 10px; }
+        pre { text-align: left; background: #f4f4f4; padding: 10px; border-radius: 5px; }
+    </style>
+</head>
+<body>
+
+    <h2>Upload Gambar Sepeda</h2>
+    <form id="upload-form" enctype="multipart/form-data">
+        <label>Tampak Depan:</label>
+        <input type="file" name="tampak_depan" required><br>
+        
+        <label>Tampak Kiri:</label>
+        <input type="file" name="tampak_kiri" required><br>
+        
+        <label>Tampak Kanan:</label>
+        <input type="file" name="tampak_kanan" required><br>
+        
+        <label>Tampak Belakang:</label>
+        <input type="file" name="tampak_belakang" required><br>
+        
+        <button type="submit">Upload & Prediksi</button>
+    </form>
+
+    <h3>Hasil Prediksi:</h3>
+    <pre id="result">Belum ada hasil...</pre>
+
+    <script>
+        document.getElementById("upload-form").onsubmit = async function(event) {
+            event.preventDefault();
+            
+            let formData = new FormData(this);
+            let response = await fetch("/predict", {
+                method: "POST",
+                body: formData
+            });
+
+            let result = await response.json();
+            document.getElementById("result").textContent = JSON.stringify(result, null, 4);
+        };
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,102 @@
+from flask import Flask
+from app.config.config import get_config_by_name
+from app.initialize_functions import initialize_route, initialize_db, initialize_swagger
+
+def create_app(config=None) -> Flask:
+    """
+    Create a Flask application.
+
+    Args:
+        config: The configuration object to use.
+
+    Returns:
+        A Flask application instance.
+    """
+    app = Flask(__name__)
+    if config:
+        app.config.from_object(get_config_by_name(config))
+
+    # Initialize extensions
+    initialize_db(app)
+
+    # Register blueprints
+    initialize_route(app)
+
+    # Initialize Swagger
+    initialize_swagger(app)
+
+    return app
+
+
+from flask import Flask, request, jsonify
+import torch
+import cv2
+import numpy as np
+from PIL import Image
+from flask import render_template
+import sys
+sys.path.append("D:/laravel8/newprojectskripsi/flaskapi/app/yolov9")
+
+# Load YOLOv9 model
+model = torch.hub.load('yolov9', 'custom', path='best.pt', source='local')
+
+app = Flask(__name__)
+
+def process_image(image_file):
+    """Process image and get YOLO predictions."""
+    image = Image.open(image_file).convert('RGB')
+    results = model(image)
+    detections = results.pandas().xyxy[0]  # Get results as DataFrame
+    
+    # Initialize default response
+    output = {
+        "status": "invalid",
+        "handlebar": None,
+        "saddle": None,
+        "pedal": None,
+        "front_wheel": None,
+        "rear_wheel": None
+    }
+    
+    # Define required labels
+    labels = ["handlebar", "saddle", "pedal", "front_wheel", "rear_wheel"]
+    
+    # Check detections
+    for label in labels:
+        detected = detections[detections['name'] == label]
+        if not detected.empty:
+            confidence = round(detected['confidence'].max() * 100, 2)
+            output[label] = True
+            output[f"{label}_confidence"] = confidence
+    
+    # Set status to valid if all required parts are detected
+    if all(output[label] for label in labels):
+        output["status"] = "valid"
+    
+    return output
+
+@app.route('/')
+def index():
+    return render_template('index.html')
+
+@app.route('/predict', methods=['POST'])
+def predict():
+    if 'tampak_depan' not in request.files or \
+       'tampak_kiri' not in request.files or \
+       'tampak_kanan' not in request.files or \
+       'tampak_belakang' not in request.files:
+        return jsonify({"success": False, "message": "Semua gambar harus diunggah."}), 400
+    
+    images = {
+        "tampak_depan": request.files['tampak_depan'],
+        "tampak_kiri": request.files['tampak_kiri'],
+        "tampak_kanan": request.files['tampak_kanan'],
+        "tampak_belakang": request.files['tampak_belakang']
+    }
+    
+    predictions = {view: process_image(img) for view, img in images.items()}
+    
+    return jsonify({"success": True, "predictions": predictions})
+
+if __name__ == '__main__':
+    app.run(debug=True)

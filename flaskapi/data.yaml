@@ -1,0 +1,16 @@
+names:
+- front_wheel
+- handlebar
+- pedal
+- rear_wheel
+- saddle
+nc: 5
+roboflow:
+  license: CC BY 4.0
+  project: bicycle-model
+  url: https://universe.roboflow.com/bicycleimg/bicycle-model/dataset/1
+  version: 1
+  workspace: bicycleimg
+test: /content/drive/MyDrive/skripsipelangi/bikepartsdetection/yolov9/Bicycle-Model-1/test/images
+train: /content/drive/MyDrive/skripsipelangi/bikepartsdetection/yolov9/Bicycle-Model-1/train/images
+val: /content/drive/MyDrive/skripsipelangi/bikepartsdetection/yolov9/Bicycle-Model-1/valid/images
