@@ -126,6 +126,7 @@ return [
         'options' => [
             'cluster' => env('REDIS_CLUSTER', 'redis'),
             'prefix' => env('REDIS_PREFIX', Str::slug(env('APP_NAME', 'laravel'), '_').'_database_'),
+            PDO::MYSQL_ATTR_INIT_COMMAND => 'SET SESSION wait_timeout=300'
         ],
 
         'default' => [

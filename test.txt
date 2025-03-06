@@ -1,53 +1,33 @@
-from flask import Flask
-from app.config.config import get_config_by_name
-from app.initialize_functions import initialize_route, initialize_db, initialize_swagger
-
-def create_app(config=None) -> Flask:
-    """
-    Create a Flask application.
-
-    Args:
-        config: The configuration object to use.
-
-    Returns:
-        A Flask application instance.
-    """
-    app = Flask(__name__)
-    if config:
-        app.config.from_object(get_config_by_name(config))
-
-    # Initialize extensions
-    initialize_db(app)
-
-    # Register blueprints
-    initialize_route(app)
-
-    # Initialize Swagger
-    initialize_swagger(app)
-
-    return app
-
-
 from flask import Flask, request, jsonify
 import torch
-import cv2
-import numpy as np
+import os
+from werkzeug.utils import secure_filename
 from PIL import Image
-from flask import render_template
+from flask_cors import CORS
 import sys
-sys.path.append("D:/laravel8/newprojectskripsi/flaskapi/app/yolov9")
+
+sys.path.append("D:/laravel8/newprojectskripsi/flaskapi/yolov9")
 
 # Load YOLOv9 model
 model = torch.hub.load('yolov9', 'custom', path='best.pt', source='local')
 
 app = Flask(__name__)
+CORS(app)
 
-def process_image(image_file):
-    """Process image and get YOLO predictions."""
-    image = Image.open(image_file).convert('RGB')
+UPLOAD_FOLDER = "uploads"
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)  # Buat folder jika belum ada
+
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
+
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+def process_image(image_path, view):
+    """Process image and get YOLO predictions based on the view."""
+    image = Image.open(image_path).convert('RGB')
     results = model(image)
     detections = results.pandas().xyxy[0]  # Get results as DataFrame
-    
+
     # Initialize default response
     output = {
         "status": "invalid",
@@ -57,46 +37,389 @@ def process_image(image_file):
         "front_wheel": None,
         "rear_wheel": None
     }
-    
-    # Define required labels
-    labels = ["handlebar", "saddle", "pedal", "front_wheel", "rear_wheel"]
-    
+
+    # Define required labels based on view
+    view_labels = {
+        "tampak_depan": ["handlebar", "saddle", "pedal", "front_wheel"],
+        "tampak_kiri": ["handlebar", "saddle", "pedal", "front_wheel", "rear_wheel"],
+        "tampak_kanan": ["handlebar", "saddle", "pedal", "front_wheel", "rear_wheel"],
+        "tampak_belakang": ["handlebar", "saddle", "pedal", "rear_wheel"]
+    }
+
+    required_labels = view_labels.get(view, [])
+
     # Check detections
-    for label in labels:
+    for label in required_labels:
         detected = detections[detections['name'] == label]
         if not detected.empty:
             confidence = round(detected['confidence'].max() * 100, 2)
             output[label] = True
             output[f"{label}_confidence"] = confidence
-    
-    # Set status to valid if all required parts are detected
-    if all(output[label] for label in labels):
-        output["status"] = "valid"
-    
-    return output
 
-@app.route('/')
-def index():
-    return render_template('index.html')
+    # Set status to valid if all required parts are detected
+    if all(output.get(label, False) for label in required_labels):
+        output["status"] = "valid"
+
+    return output
 
 @app.route('/predict', methods=['POST'])
 def predict():
-    if 'tampak_depan' not in request.files or \
-       'tampak_kiri' not in request.files or \
-       'tampak_kanan' not in request.files or \
-       'tampak_belakang' not in request.files:
-        return jsonify({"success": False, "message": "Semua gambar harus diunggah."}), 400
-    
-    images = {
-        "tampak_depan": request.files['tampak_depan'],
-        "tampak_kiri": request.files['tampak_kiri'],
-        "tampak_kanan": request.files['tampak_kanan'],
-        "tampak_belakang": request.files['tampak_belakang']
-    }
-    
-    predictions = {view: process_image(img) for view, img in images.items()}
-    
-    return jsonify({"success": True, "predictions": predictions})
+    if 'image' not in request.files:
+        return jsonify({"success": False, "message": "Tidak ada gambar yang diunggah."}), 400
+
+    image = request.files['image']
+    view = request.form.get('jenis_gambar')
+    id_pengajuan = request.form.get('id_pengajuan')
+
+    if not id_pengajuan:
+        return jsonify({"success": False, "message": "id_pengajuan missing"}), 400
+
+    if not view or view not in ["tampak_depan", "tampak_kiri", "tampak_kanan", "tampak_belakang"]:
+        return jsonify({"success": False, "message": "Jenis gambar tidak valid."}), 400
+
+    if not allowed_file(image.filename):
+        return jsonify({"success": False, "message": "Format file tidak didukung."}), 400
+
+    # Simpan gambar dengan nama aman
+    filename = secure_filename(image.filename)
+    image_path = os.path.join(UPLOAD_FOLDER, filename)
+    image.save(image_path)
+
+    # Proses gambar untuk deteksi
+    prediction = process_image(image_path, view)
+
+    return jsonify({
+        "success": True,
+        "view": view,
+        "id_pengajuan": id_pengajuan,
+        "prediction": prediction,
+        "image_path": image_path  # Path gambar yang tersimpan
+    })
 
 if __name__ == '__main__':
     app.run(debug=True)
+
+
+
+
+step
+
+document.addEventListener("DOMContentLoaded", function () {
+    let idPengajuan = null; // Simpan ID pengajuan setelah dibuat pertama kali
+
+    const images = {
+        "tampak_depan": "depan",
+        "tampak_kiri": "kiri",
+        "tampak_kanan": "kanan",
+        "tampak_belakang": "belakang"
+    };
+
+    let validationResults = {
+        "tampak_depan": false,
+        "tampak_kiri": false,
+        "tampak_kanan": false,
+        "tampak_belakang": false
+    };
+
+
+    Object.keys(images).forEach((posisi) => {
+        document.getElementById(images[posisi]).addEventListener("change", function (event) {
+            const file = event.target.files[0];
+            if (file) {
+                if (!idPengajuan) {
+                    buatPengajuan(file, posisi); // Jika belum ada pengajuan, buat dulu
+                } else {
+                    uploadGambar(file, posisi);
+                }
+            }
+        });
+    });
+
+    function buatPengajuan(file, posisi) {
+        // Ambil nilai dari form input
+        let hargaSepeda = document.getElementById("hargasepeda").value;
+        let kodePromo = document.getElementById("kodepromo").value;
+        let plan = document.getElementById("planInput").value;
+        let premi = document.getElementById("premiInput").value;
+        let total = document.getElementById("totalInput").value;
+        let mereksepeda = document.getElementById("mereksepeda").value;
+        let warnaSepeda = document.getElementById("warnasepeda").value;
+        let tipeSepeda = document.getElementById("tipesepeda").value;
+        let noRangkaSepeda = document.getElementById("rangkasepeda").value;
+        let modelSepeda = document.getElementById("modelsepeda").value;
+        let tahunProduksi = document.getElementById("tahunproduksi").value;
+        let seriSepeda = document.getElementById("serisepeda").value;
+        let noInvoicePembelian = document.getElementById("no_invoice_pembelian").value;
+
+        // Buat FormData dan tambahkan nilai dari form input
+        let formData = new FormData();
+        formData.append("harga_sepeda", hargaSepeda);
+        formData.append("kode_promo", kodePromo);
+        formData.append("plan", plan);
+        formData.append("premi", premi);
+        formData.append("total", total);
+        formData.append("merek_sepeda", mereksepeda);
+        formData.append("warna_sepeda", warnaSepeda);
+        formData.append("tipe_sepeda", tipeSepeda);
+        formData.append("no_rangka_sepeda", noRangkaSepeda);
+        formData.append("model_sepeda", modelSepeda);
+        formData.append("tahun_produksi", tahunProduksi);
+        formData.append("seri_sepeda", seriSepeda);
+        formData.append("no_invoice_pembelian", noInvoicePembelian);
+
+
+        // Ambil file KTP dan Invoice dari input
+        let ktpFile = document.querySelector(`input[name="images[ktp]"]`).files[0];
+        let invoiceFile = document.querySelector(`input[name="images[invoice]"]`).files[0];
+
+        if (!ktpFile || !invoiceFile) {
+            alert("Harap unggah KTP dan Invoice terlebih dahulu!");
+            return;
+        }
+
+        formData.append("images[ktp]", ktpFile);
+        formData.append("images[invoice]", invoiceFile);
+
+        fetch("/api/storePengajuan", {
+            method: "POST",
+            body: formData,
+        })
+        .then((response) => response.json())
+        .then((data) => {
+            if (data.success) {
+                idPengajuan = data.id_pengajuan; // Simpan ID pengajuan untuk gambar berikutnya
+                uploadGambar(file, posisi);
+            } else {
+                alert("Gagal membuat pengajuan: " + data.message);
+            }
+        })
+        .catch((error) => {
+            console.error("Error:", error);
+        });
+    }
+
+
+    function uploadGambar(file, posisi) {
+        let formData = new FormData();
+        formData.append("image", file);
+        formData.append("jenis_gambar", posisi);
+        formData.append("id_pengajuan", idPengajuan);
+
+        fetch("http://127.0.0.1:5000/predict", {
+            method: "POST",
+            body: formData,
+        })
+        .then((response) => response.json())
+        .then((data) => {
+            console.log(`Prediksi ${posisi}:`, data);
+
+            const resultElement = document.getElementById(`result-tampak_${images[posisi]}`);
+
+            if(data.success){
+                if (data.prediction.status === "valid") {
+                    resultElement.innerText = "✅ Valid";
+                    resultElement.classList.remove("badge-invalid");
+                    resultElement.classList.add("badge-valid");
+                    validationResults[posisi] = true;
+                    // predictionResults[posisi] = data.prediction; // Simpan hasil prediksi
+                } else {
+                    resultElement.innerText = "❌ Invalid";
+                    resultElement.classList.remove("badge-valid");
+                    resultElement.classList.add("badge-invalid");
+                    validationResults[posisi] = false;
+                }
+                simpanHasilPrediksi(data, posisi);
+            } else {
+                alert("Gagal memproses gambar!");
+            }
+
+            checkAllValid();
+        })
+        .catch((error) => {
+            console.error("Error:", error);
+            const resultElement = document.getElementById(`result-tampak_${images[posisi]}`);
+            resultElement.innerText = "❌ Error";
+            resultElement.classList.remove("badge-valid");
+            resultElement.classList.add("badge-invalid");
+            validationResults[posisi] = false;
+            checkAllValid();
+        });
+    }
+
+    function checkAllValid() {
+        const allValid = Object.values(validationResults).every((val) => val);
+        document.getElementById("submit-form").disabled = !allValid; // Aktifkan tombol submit jika valid
+    }
+
+    document.getElementById("submit-form").addEventListener("click", function () {
+        ambilDataPengajuan(idPengajuan);
+    });
+
+    function simpanHasilPrediksi(prediction, posisi) {
+        if (typeof idPengajuan === "undefined" || idPengajuan === null || !prediction || !prediction.prediction) {
+            console.error("Data tidak lengkap, tidak dapat menyimpan hasil prediksi.");
+            return;
+        }
+
+        let formData = new FormData();
+        formData.append("id_pengajuan", idPengajuan);
+        formData.append("jenis_gambar", posisi);
+        formData.append("hasil_deteksi", JSON.stringify(prediction.prediction));
+        formData.append("status", prediction.prediction?.status || "Tidak diketahui");
+        formData.append("path_gambar", prediction.image_path || "");
+
+        fetch("/api/storePrediksi", {
+            method: "POST",
+            headers: { "Accept": "application/json" },
+            body: formData
+        })
+        .then(response => {
+            if (!response.ok) {
+                return response.json().then(err => { throw new Error(err.message || "Terjadi kesalahan"); });
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log("Prediksi berhasil disimpan:", data);
+        })
+        .catch(error => console.error("Error saat kirim ke Laravel:", error));
+    }
+
+    function ambilDataPengajuan(idPengajuan) {
+        fetch(`/api/getPengajuanPrediksi/${idPengajuan}`)
+        .then(response => response.json())
+        .then(data => {
+            console.log("Data Pengajuan & Prediksi:", data);
+
+            if (!data.success) {
+                console.error("Gagal mengambil data pengajuan.");
+                return;
+            }
+
+            // Tampilkan informasi pengajuan
+            document.getElementById("pengajuan-info").innerHTML = `
+                <div class="detail-container">
+                    <p>Produk</p>
+                    <p><b>Sepeda</b></p>
+                </div>
+                <div class="detail-container">
+                    <p>Seri Sepeda</p>
+                    <p><b>${data.pengajuan.seri_sepeda || "-"}</b></p>
+                </div>
+                <div class="detail-container">
+                    <p>Paket</p>
+                    <p><b>${data.pengajuan.plan || "-"}</b></p>
+                </div>
+                <div class="detail-container">
+                    <p>Warna Sepeda</p>
+                    <p><b>${data.pengajuan.warna_sepeda || "-"}</b></p>
+                </div>
+                <div class="detail-container">
+                    <p>Premi</p>
+                    <p><b>Rp ${data.pengajuan.premi || "0"}</b></p>
+                </div>
+                <div class="detail-container">
+                    <p>Nomor Rangka Sepeda</p>
+                    <p><b>${data.pengajuan.no_rangka_sepeda || "-"}</b></p>
+                </div>
+                <div class="detail-container">
+                    <p>Harga Sepeda</p>
+                    <p><b>Rp ${data.pengajuan.harga_sepeda || "0"}</b></p>
+                </div>
+                <div class="detail-container">
+                    <p>Tahun Produksi Sepeda</p>
+                    <p><b>${data.pengajuan.tahun_produksi || "-"}</b></p>
+                </div>
+                <div class="detail-container">
+                    <p>Merek Sepeda</p>
+                    <p><b>${data.pengajuan.merek_sepeda || "-"}</b></p>
+                </div>
+                <div class="detail-container">
+                    <p>Nomor Invoice Sepeda</p>
+                    <p><b>${data.pengajuan.no_invoice_pembelian || "-"}</b></p>
+                </div>
+                <div class="detail-container">
+                    <p>Tipe Sepeda</p>
+                    <p><b>${data.pengajuan.tipe_sepeda || "-"}</b></p>
+                </div>
+                <div class="detail-container">
+                    <p>Kode Promo</p>
+                    <p><b>${data.pengajuan.kode_promo || "-"}</b></p>
+                </div>
+                <div class="detail-container">
+                    <p>Model Sepeda</p>
+                    <p><b>${data.pengajuan.model_sepeda || "-"}</b></p>
+                </div>
+            `;
+
+            tampilkanPrediksiValid(data.prediksi);
+        })
+        .catch(error => console.error("Error mengambil semua prediksi:", error));
+    }
+
+    function tampilkanPrediksiValid(prediksiData) {
+        const posisiValid = ["tampak_depan", "tampak_kiri", "tampak_kanan", "tampak_belakang"];
+        let prediksiHTML = "";
+
+        posisiValid.forEach(posisi => {
+            let prediksiPosisi = prediksiData.find(p => p.jenis_gambar === posisi && p.status === "valid");
+            if (prediksiPosisi) {
+                let pathGambar = prediksiPosisi.path_gambar ? `${prediksiPosisi.path_gambar}` : "/img/default-image.jpg";
+
+                prediksiHTML += `
+                    <div class="document-container">
+                        <p>${posisi}</p>
+                        <p>${pathGambar}</p>
+                        <div class="badge-sukses">${prediksiPosisi.status} </div>
+                    </div>
+                    <div class="hl"></div>
+                `;
+            }
+        });
+
+        document.getElementById("prediksi-info").innerHTML = prediksiHTML || "<p>Tidak ada prediksi valid.</p>";
+    }
+
+    document.getElementById("snk-checkbox").addEventListener("change", function () {
+        let snkValue = this.checked ? 1 : 0; // Jika dicentang, ubah jadi 1; jika tidak, tetap 0
+
+        fetch("/api/updateSnk", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json",
+                "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').content
+            },
+            body: JSON.stringify({ id_pengajuan: idPengajuan, snk: snkValue })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                window.location.href = "/checkout"; // Redirect ke halaman checkout
+            } else {
+                alert("Gagal menyimpan persetujuan. Coba lagi!");
+            }
+        })
+        .catch(error => console.error("Gagal memperbarui SNK:", error));
+    });
+
+
+});
+
+
+pengajuan->updateSnk
+kirim email
+isi: nomor polis, produk, paket, periode paket, periode asuransi, premi.
+(berarti setelah setuju, sistem membuat tabel polis
+    isinya:
+    - id_pengajuan
+    - nomor polis
+    - produk
+    - paket
+    - periode paket
+    - periode berlaku
+    - periode berakhir
+    - premi
+lalu kirim email
+)
+lanjut ke checkout
