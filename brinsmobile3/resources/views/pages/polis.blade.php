@@ -22,30 +22,30 @@
             <thead>
             <tr>
                 <th scope="col"></th>
-                <th scope="col">Nomor Polis</th>
+                <th scope="col">No Polis</th>
                 <th scope="col">Paket</th>
                 <th scope="col">Premi</th>
                 <th scope="col">Tanggal Berlaku</th>
-                <th scope="col">Tanggal Berakhir</th>
                 <th scope="col">Status</th>
             </tr>
             </thead>
             <tbody>
-            <tr>
-                <th>
-                    <div class="polis-items">
-                        <img src="/img/logo_produk/sepeda.png" alt="" class="polis-icon">
-                        <b class="polis-label">SEPEDA</b>
-                    </div>
-                </th>
-                <td>Mark</td>
-                <td>Otto</td>
-                <td>@mdo</td>
-                <td>@mdo</td>
-                <td>@mdo</td>
-                <td>Aktif</td>
-            </tr>
-            </tbody>
+                @foreach ($polis as $item)
+                    <tr>
+                        <th>
+                            <div class="polis-items">
+                                <img src="/img/logo_produk/sepeda.png" alt="" class="polis-icon">
+                                <b class="polis-label">SEPEDA</b>
+                            </div>
+                        </th>
+                        <td>{{ $item->nomor_polis }}</td>
+                        <td>{{ $item->paket }}</td>
+                        <td>Rp {{ number_format($item->premi, 0, ',', '.') }}</td>
+                        <td>{{ $item->periode_asuransi }}</td>
+                        <td>Aktif</td>
+                    </tr>
+                @endforeach
+                </tbody>
         </table>
     </div>
     <div class="polis-section" style="display: none">
@@ -53,7 +53,7 @@
             <thead>
             <tr>
                 <th scope="col"></th>
-                <th scope="col">Nomor Polis</th>
+                <th scope="col">No Referensi</th>
                 <th scope="col">Paket</th>
                 <th scope="col">Premi</th>
                 <th scope="col">Tanggal Berlaku</th>
@@ -84,7 +84,7 @@
             <thead>
             <tr>
                 <th scope="col"></th>
-                <th scope="col">Nomor Polis</th>
+                <th scope="col">No Referensi</th>
                 <th scope="col">Paket</th>
                 <th scope="col">Premi</th>
                 <th scope="col">Tanggal Berlaku</th>

@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('pm_penutupan', function (Blueprint $table) {
             $table->id();
             $table->foreignId('id_pengajuan')->constrained('pengajuans')->onDelete('cascade');
-            $table->string('nomor_polis')->unique();
+            $table->string('ref_penutupan')->unique();
             $table->string('produk');
             $table->string('paket');
             $table->string('periode_paket');

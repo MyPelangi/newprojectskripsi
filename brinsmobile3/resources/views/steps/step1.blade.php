@@ -3,7 +3,7 @@
     <p class="card-text">Lengkapi kolom dibawah ini.</p>
     <div class="input-text">
         <input type="hidden" id="id_pengajuan" value="">
-        <label>Harga Sepeda*</label>
+        <label>Harga Aset Sepeda*</label>
         <div class="input-container">
             <p class="rp">Rp</p>
             <input class="text-box" type="text" id="hargasepeda" name="harga_sepeda" value="{{ $pengajuan->harga_sepeda ?? '' }}" required>

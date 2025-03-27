@@ -3,6 +3,7 @@ import torch
 import os
 from werkzeug.utils import secure_filename
 from PIL import Image
+import uuid
 import sys
 sys.path.append("D:/laravel8/newprojectskripsi/flaskapi/yolov9")
 
@@ -78,7 +79,7 @@ def predict():
         return jsonify({"success": False, "message": "Format file tidak didukung."}), 400
 
     # Simpan gambar dengan nama aman
-    filename = secure_filename(image.filename)
+    filename = f"{uuid.uuid4().hex}_{secure_filename(image.filename)}"
     image_path = os.path.join(UPLOAD_FOLDER, filename)
     image.save(image_path)
 

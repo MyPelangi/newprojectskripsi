@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\User;
+use App\Models\Polis;
 use App\Models\PermohonanPenutupan;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -31,5 +32,10 @@ class Pembayarans extends Model
     public function penutupan()
     {
         return $this->belongsTo(PermohonanPenutupan::class, 'id_penutupans');
+    }
+
+    public function polis()
+    {
+        return $this->belongsTo(Polis::class, 'id_penutupans');
     }
 }

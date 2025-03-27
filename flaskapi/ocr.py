@@ -2,6 +2,7 @@ from flask import Blueprint, request, jsonify
 import google.generativeai as genai
 from werkzeug.utils import secure_filename
 from PIL import Image
+import uuid
 import os
 
 ocr_bp = Blueprint('ocr', __name__)
@@ -11,6 +12,11 @@ os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
 API_KEY = "AIzaSyBM1DTjiov1pyZr3hTLdSuCT0winGNV0Rw"
 genai.configure(api_key=API_KEY)
+
+def generate_unique_filename(prefix, filename):
+    """Generate a unique filename using UUID."""
+    ext = filename.rsplit('.', 1)[-1].lower()  # Get file extension
+    return f"{prefix}_{uuid.uuid4().hex}.{ext}"
 
 def ocr_gemini(image_path):
     """Gunakan Google Gemini untuk membaca nama dari KTP/invoice"""
@@ -43,12 +49,14 @@ def ocr():
 
     if 'ktp' in request.files:
         ktp = request.files['ktp']
-        ktp_path = os.path.join(UPLOAD_FOLDER, secure_filename(ktp.filename))
+        filename = generate_unique_filename("ktp", ktp.filename)
+        ktp_path = os.path.join(UPLOAD_FOLDER, filename)
         ktp.save(ktp_path)
 
     if 'invoice' in request.files:
         invoice = request.files['invoice']
-        invoice_path = os.path.join(UPLOAD_FOLDER, secure_filename(invoice.filename))
+        filename = generate_unique_filename("invoice", invoice.filename)
+        invoice_path = os.path.join(UPLOAD_FOLDER, filename)
         invoice.save(invoice_path)
 
     # Pastikan setidaknya salah satu file tersedia

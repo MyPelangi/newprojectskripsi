@@ -284,8 +284,16 @@ h4,h5{
 
 
 /* Polis */
+.polis-section tbody tr {
+    cursor: pointer;
+}
+
+.polis-section th{
+    text-align: center;
+}
 .polis-section td{
     vertical-align: middle;
+    text-align: center;
 }
 
 .polis-items {
@@ -310,10 +318,21 @@ h4,h5{
 /* end polis */
 
 /* Keranjang */
+.keranjang-section th{
+    text-align: center;
+}
+
 .keranjang-section td{
     vertical-align: middle;
+    text-align: center;
+}
+
+.keranjang-section tbody tr {
+    cursor: pointer;
 }
 /* end keranjang */
+
+
 /* header */
 .header{
     background: linear-gradient(to right, #ffffff, #00529C);
@@ -464,13 +483,13 @@ span {
     position: relative;
     width: 100%;
     height: 35px;
-    background-color: #e0e0e0;
-    border-radius: 8px;
+    background-color: #fffdfd;
+    border-radius: 5px;
     border: none;
     cursor: pointer;
-    /* margin-bottom: 32px; */
     font-size: 14px;
     padding: 0 10px;
+    border: 1px solid #e66a00;
 }
 /* end nilai pertanggungan */
 
@@ -567,7 +586,8 @@ p {
     max-width: 1200px;
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 20px;
+    column-gap: 20px;
+    row-gap: 10px;
 }
 
 .image-upload {
@@ -636,6 +656,18 @@ p {
     flex-direction: column;
     align-items: center;
     justify-content: center;
+}
+
+
+.loading-spinner {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 15px; /* Ukuran GIF */
+    height: 15px;
+    transform: translate(-50%, -50%);
+    z-index: 10;
+    display: none; /* Sembunyikan awalnya */
 }
 
 #loading {
@@ -761,9 +793,13 @@ p {
     margin-top: 0px;
 }
 
-.email-content-split{
-    display: flex;
-    justify-content: center;
+.email-card {
+    border: 1px solid #00529C;
+    border-radius: 10px;
+    padding: 20px 40px;
+}
+.card table{
+    border: none;
 }
 
 .field p{
@@ -911,13 +947,32 @@ p {
     padding-bottom: 25px;
 }
 
-.total-container{
+.dashboard-container .total-container{
     display: flex;
     justify-content: space-between;
 }
 
+.info-container{
+    display: flex;
+    gap: 20px;
+    justify-content: space-between;
+}
+
+.info-container .total-container{
+    display: flex;
+    flex-direction: column;
+    align-items: space-between;
+}
+
 .total-card{
-    width: 340px;
+    width: 300px;
+    border: 2px solid #00529C;
+}
+
+.total-chart-card{
+    width: 370px;
+    height: 341px;
+    border: 2px solid #00529C;
 }
 
 .filter{
@@ -947,4 +1002,86 @@ p {
     border: none;
     border-radius: 5px;
     margin-top: 31px;
+}
+.datatables-wrapper{
+    /* display: flex;
+    justify-content: center; */
+    width: 99% !important;
+    /* overflow-x: auto; */
+}
+#pengajuans-table tbody tr {
+    cursor: pointer;
+}
+
+.chart-content .card{
+    border: 2px solid #00529C;
+}
+.chart-content canvas{
+    width: 100% !important;
+    width: 595px !important;
+    height: auto !important;
+}
+
+.detail-step{
+    display: flex;
+    justify-content: center;
+    margin: auto;
+    background-color: #D9D9D9;
+    width: 100%;
+    padding: 3px;
+    border-radius: 30px;
+}
+
+.detail-step .section{
+    width: 25%;
+    height: 30px;
+    margin: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* background-color: #6D6D6D; */
+    border-radius: 30px;
+    cursor: pointer;
+}
+
+.chart-container {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* Jarak antara label dan chart */
+}
+
+.chart-labels {
+    flex: 1;
+    text-align: left;
+}
+
+.chart-labels ul {
+    list-style: none;
+    padding: 0;
+}
+
+.chart-labels li {
+    font-size: 16px;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+}
+
+.color-box {
+    display: inline-block;
+    width: 15px;
+    height: 15px;
+    margin-right: 10px;
+}
+
+.valid { background-color: rgba(75, 192, 192, 0.7); } /* Warna hijau */
+.invalid { background-color: rgba(255, 99, 132, 0.7); } /* Warna merah */
+.frontwheel { background-color: rgba(255, 99, 132, 0.7); } /* Warna merah */
+.handlebar { background-color: rgba(54, 162, 235, 0.7); } /* Warna biru */
+.pedal { background-color: rgba(255, 206, 86, 0.7); } /* Warna kuning */
+.rearwheel { background-color: rgba(75, 192, 192, 0.7); } /* Warna hijau */
+.saddle { background-color: rgba(153, 102, 255, 0.7); } /* Warna ungu */
+
+.chart-area {
+    flex: 1;
 }

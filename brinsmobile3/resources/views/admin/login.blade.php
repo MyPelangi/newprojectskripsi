@@ -5,6 +5,7 @@
     <div class="login">
         <div class="login-title">
             <img src="/img/logobrins.png" alt="">
+            <h3>DASHBOARD</h3>
             <h3>LOGIN</h3>
         </div>
         <form action="{{ route('admin.login') }}" method="POST">

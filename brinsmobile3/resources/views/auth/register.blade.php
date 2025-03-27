@@ -20,15 +20,15 @@
             </div>
             <div class="register-section">
                 <div class="card-content-split">
-                    <div class="input-text">
+                    <div class="form-group">
                         <label>Nama</label>
                         <input class="form-control" type="text" id="nama" name="nama" required>
                     </div>
-                    <div class="input-text">
+                    <div class="form-group">
                         <label>Nama Ibu Kandung</label>
                         <input class="form-control" type="text" id="nama_ibu" name="nama_ibu" required>
                     </div>
-                    <div class="input-text">
+                    <div class="form-group">
                         <label>Gender</label>
                         <div class="form-check">
                             <div class="form-check form-check-inline">
@@ -41,11 +41,11 @@
                             </div>
                         </div>
                     </div>
-                    <div class="input-text">
+                    <div class="form-group">
                         <label>Pekerjaan</label>
                         <input class="form-control" type="text" id="pekerjaan" name="pekerjaan" required>
                     </div>
-                    <div class="input-text">
+                    <div class="form-group">
                         <label>Tempat lahir</label>
                         <input class="form-control" type="text" id="tempat_lahir" name="tempat_lahir" required>
                     </div>
@@ -59,23 +59,23 @@
                             <option value="Lainnya">Lainnya</option>
                         </select>
                     </div>
-                    <div class="input-text">
+                    <div class="form-group">
                         <label>Tanggal lahir</label>
                         <input class="form-control" type="date" id="tgl_lahir" name="tgl_lahir" required>
                     </div>
-                    <div class="input-text">
+                    <div class="form-group">
                         <label>Rata-rata pendapatan per tahun</label>
                         <input class="form-control" type="text" id="pendapatan_tahunan" name="pendapatan_tahunan" required>
                     </div>
-                    <div class="input-text">
+                    <div class="form-group">
                         <label>Nomor KTP</label>
                         <input class="form-control" type="text" id="no_ktp" name="no_ktp" required>
                     </div>
-                    <div class="input-text">
+                    <div class="form-group">
                         <label>Tujuan/hubungan bisnis</label>
                         <input class="form-control" type="text" id="tujuan" name="tujuan" required>
                     </div>
-                    <div class="input-text">
+                    <div class="form-group">
                         <label>Kewarganegaraan</label>
                         <div class="form-check">
                             <div class="form-check form-check-inline">
@@ -88,7 +88,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="input-text">
+                    <div class="form-group">
                         <label>Nama penerima manfaat</label>
                         <input class="form-control" type="text" id="nama_penerima" name="nama_penerima" required>
                     </div>
@@ -101,7 +101,7 @@
                             <option value="Cerai">Cerai</option>
                         </select>
                     </div>
-                    <div class="input-text">
+                    <div class="form-group">
                         <label>Kantor cabang terdekat</label>
                         <input class="form-control" type="text" id="kantor_cabang" name="kantor_cabang" required>
                     </div>
@@ -109,43 +109,44 @@
             </div>
             <div class="register-section" style="display: none;">
                 <div class="card-content-split">
-                    <div class="input-text">
+                    <div class="form-group">
                         <label>Email</label>
                         <input class="form-control" type="text" id="email" name="email" required>
                     </div>
-                    <div class="input-text">
+                    <div class="form-group">
                         <label>Kota</label>
                         <input class="form-control" type="text" id="kota" name="kota" required>
                     </div>
-                    <div class="input-text">
+                    <div class="form-group">
                         <label>Password</label>
                         <input class="form-control" type="password" id="password" name="password" required>
+                        <i class="fa fa-eye passwordshow"></i>
                     </div>
-                    <div class="input-text">
+                    <div class="form-group">
                         <label>Kecamatan/kelurahan</label>
                         <input class="form-control" type="text" id="kecamatan_kelurahan" name="kecamatan_kelurahan" required>
                     </div>
-                    <div class="input-text">
+                    <div class="form-group">
                         <label>Nomor telepon</label>
                         <input class="form-control" type="text" id="no_telp" name="no_telp" required>
                     </div>
-                    <div class="input-text">
+                    <div class="form-group">
                         <label>Alamat lengkap</label>
                         <input class="form-control" type="text" id="alamat_lengkap" name="alamat_lengkap" required>
                     </div>
-                    <div class="input-text">
+                    <div class="form-group">
                         <label>Kode pos</label>
                         <input class="form-control" type="text" id="kode_pos" name="kode_pos" required>
                     </div>
-                    <div class="input-text">
+                    <div class="form-group">
                         <label>Alamat kantor</label>
                         <input class="form-control" type="text" id="alamat_kantor" name="alamat_kantor" required>
                     </div>
-                    <div class="input-text">
+                    <div class="form-group">
                         <label>Provinsi</label>
                         <input class="form-control" type="text" id="provinsi" name="provinsi" required>
                     </div>
-                    <div class="input-text">
+                    <div class="form-group">
                         <label>Nomor telepon kantor</label>
                         <input class="form-control" type="text" id="no_telp_kantor" name="no_telp_kantor" required>
                     </div>

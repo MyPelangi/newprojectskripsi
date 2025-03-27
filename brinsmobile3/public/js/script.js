@@ -1,4 +1,15 @@
 document.addEventListener("DOMContentLoaded", function () {
+    $(document).on("click", ".passwordshow", function () {
+        const input = $(this).siblings(".form-control").length
+            ? $(this).siblings(".form-control")
+            : $("#password");
+        const type = input.attr("type") === "password" ? "text" : "password";
+        input.attr("type", type);
+        $(this).toggleClass('fa-eye fa-eye-slash');
+    });
+});
+
+document.addEventListener("DOMContentLoaded", function () {
     const sections = document.querySelectorAll(".register-section");
     const steps = document.querySelectorAll(".register-step .section");
 
@@ -155,16 +166,17 @@ document.addEventListener("DOMContentLoaded", function () {
     window.nextStep = function () {
         const totalSteps = document.querySelectorAll(".step").length;
 
-        if (currentStep < totalSteps) {
+        if (validateCurrentStep() && currentStep < totalSteps) {
             goToStep(currentStep + 1);  // Pindah ke step berikutnya
         }
-    }
+    };
 
     window.prepareDataAndNextStep = function () {
         document.getElementById('premiInput').value = document.getElementById('premi').innerText.replace('Rp ', '').replace('.', '');
         document.getElementById('totalInput').value = document.getElementById('total').innerText.replace('Rp ', '').replace('.', '');
+
         nextStep();
-    }
+    };
 
     function goToStep(step) {
         let currentElement = document.getElementById(`step-${currentStep}`);
@@ -187,10 +199,37 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
+    function validateCurrentStep() {
+        let currentElement = document.getElementById(`step-${currentStep}`);
+        let inputs = currentElement.querySelectorAll("input[required], select[required], textarea[required]");
+
+        let isValid = true;
+
+        inputs.forEach(input => {
+            if (!input.value.trim()) {
+                isValid = false;
+                input.classList.add("is-invalid"); // Tambahkan class invalid jika kosong
+            } else {
+                input.classList.remove("is-invalid");
+            }
+        });
+
+        if (!isValid) {
+            alert("Harap isi semua field yang diperlukan sebelum melanjutkan.");
+        }
+
+        return isValid;
+    }
+
     // Event listener agar bisa klik step secara manual
     document.querySelectorAll('.step').forEach(step => {
         step.addEventListener('click', function () {
             let stepNumber = parseInt(this.getAttribute('data-step'));
+
+            if (stepNumber > currentStep && !validateCurrentStep()) {
+                return; // Tidak lanjut jika step sekarang belum valid
+            }
+
             goToStep(stepNumber);
         });
     });
@@ -200,6 +239,7 @@ document.addEventListener("DOMContentLoaded", function () {
         section.style.display = index === 0 ? "block" : "none";
     });
 });
+
 
 document.addEventListener("DOMContentLoaded", function () {
     const rows = document.querySelectorAll(".clickable-row");
@@ -354,6 +394,7 @@ function setupImagePreview(inputId, previewId) {
     });
 }
 
+
 // Initialize image previews for all input-preview pairs
 const imageInputs = [
     { inputId: "ktp", previewId: "preview-ktp" },
@@ -446,7 +487,6 @@ document.addEventListener("DOMContentLoaded", function () {
             if (data.success) {
                 localStorage.setItem("id_pengajuan", data.id_pengajuan); // Simpan ID pengajuan di browser
                 if (idPengajuanElement) idPengajuanElement.value = data.id_pengajuan; // Update input hidden jika ada
-                alert("Pengajuan berhasil disimpan!");
             } else {
                 alert("Gagal membuat pengajuan: " + data.message);
             }
@@ -455,6 +495,8 @@ document.addEventListener("DOMContentLoaded", function () {
             console.error("Error:", error);
         });
     }
+
+
 
 
     // step 5 Simpan status unggahan file
@@ -492,6 +534,10 @@ document.addEventListener("DOMContentLoaded", function () {
         formData.append("ktp", ktpFile);
         formData.append("invoice", invoiceFile);
 
+        // Tampilkan GIF loading
+        document.getElementById("loading-ktp").style.display = "inline-block";
+        document.getElementById("loading-invoice").style.display = "inline-block";
+
         fetch("http://localhost:5000/ocr", {
             method: "POST",
             body: formData
@@ -516,7 +562,12 @@ document.addEventListener("DOMContentLoaded", function () {
                 alert("OCR gagal: " + data.message + ". Silakan unggah ulang dokumen yang benar.");
             }
         })
-        .catch(error => console.error("Error:", error));
+        .catch(error => console.error("Error:", error))
+        .finally(() => {
+            // Sembunyikan GIF loading setelah proses selesai
+            document.getElementById("loading-ktp").style.display = "none";
+            document.getElementById("loading-invoice").style.display = "none";
+        });
     }
 
     function updateOCRStatus(data) {
@@ -600,6 +651,10 @@ document.addEventListener("DOMContentLoaded", function () {
         formData.append("jenis_gambar", posisi);
         formData.append("id_pengajuan", idPengajuan);
 
+        // Tampilkan GIF loading
+        let loadingElement = document.getElementById(`loading-${posisi}`);
+        if (loadingElement) loadingElement.style.display = "inline-block";
+
         fetch("http://127.0.0.1:5000/predict", {
             method: "POST",
             body: formData,
@@ -642,6 +697,10 @@ document.addEventListener("DOMContentLoaded", function () {
             resultElement.classList.add("badge-invalid");
             validationResults[posisi] = false;
             checkAllValid();
+        })
+        .finally(() => {
+            // Sembunyikan GIF loading setelah proses selesai
+            if (loadingElement) loadingElement.style.display = "none";
         });
     }
 

@@ -24,7 +24,7 @@
                 'Kalkulasi Premi', 'Kode Promo', 'Hasil Kalkulasi', 'Informasi Objek',
                 'Dokumen Pendukung', 'Detail Transaksi', 'Syarat & Ketentuan'
             ] as $index => $step)
-            <div class="step" data-step="{{ $index + 1 }}" onclick="goToStep({{ $index + 1 }})">
+            <div class="step" data-step="{{ $index + 1 }}" onclick="validateAndGoToStep({{ $index + 1 }})">
                 <div class="circle">{{ $index + 1 }}</div>
                 <span>{{ $step }}</span>
             </div>

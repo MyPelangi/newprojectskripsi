@@ -28,7 +28,10 @@
                     </div>
                 </div>
             </div>
-            <button type="button" class="btn upload-button">Konfirmasi Pembayaran</button>
+            <form action="{{ url('/konfirmasi-pembayaran/' . $pembayaran->id) }}" method="POST">
+                @csrf
+                <button type="submit" class="btn btn-primary">Konfirmasi Pembayaran</button>
+            </form>
         </div>
     </div>
 </div>

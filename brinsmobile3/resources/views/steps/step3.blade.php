@@ -21,9 +21,9 @@
     </div>
 
     <!-- Hidden Inputs -->
-    <input type="hidden" id="planInput" name="plan" value="{{ $pengajuan->plan ?? '' }}">
-    <input type="hidden" id="premiInput" name="premi" value="{{ $pengajuan->premi ?? '' }}">
-    <input type="hidden" id="totalInput" name="total" value="{{ $pengajuan->total ?? '' }}">
+    <input type="hidden" id="planInput" name="plan" value="{{ $pengajuan->plan ?? '' }}" required>
+    <input type="hidden" id="premiInput" name="premi" value="{{ $pengajuan->premi ?? '' }}" required>
+    <input type="hidden" id="totalInput" name="total" value="{{ $pengajuan->total ?? '' }}" required>
 
     <div class="card little-card">
         <div class="little-card-split">

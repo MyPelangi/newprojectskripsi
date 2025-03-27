@@ -240,13 +240,13 @@ class PengajuanController extends Controller
         $tanggalBerlaku = Carbon::now(); // Tanggal berlaku mulai dari sekarang
         $tanggalBerakhir = $tanggalBerlaku->copy()->addMonths($periodePaket); // Tambah 12 bulan
 
-        // Generate nomor polis (misalnya berdasarkan ID + timestamp)
-        $nomorPolis = 'BN' . strtoupper(substr(md5(uniqid()), 0, 8));
+        // Generate No Referensi (misalnya berdasarkan ID + timestamp)
+        $refPenutupan = 'BN' . strtoupper(substr(md5(uniqid()), 0, 8));
 
         // Simpan data ke tabel `permohonan_penutupan`
         $permohonan = PermohonanPenutupan::create([
             'id_pengajuan'    => $pengajuan->id,
-            'nomor_polis'     => $nomorPolis,
+            'ref_penutupan'     => $refPenutupan,
             'produk'          => 'Asuransi Sepeda', // Sesuai dengan jenis produk
             'paket'           => $pengajuan->plan, // Paket asuransi yang dipilih
             'periode_paket'   => $periodePaket . ' Bulan', // Simpan dalam format "12 Bulan"
@@ -326,8 +326,9 @@ class PengajuanController extends Controller
             ->join('pengajuans', 'pm_penutupan.id_pengajuan', '=', 'pengajuans.id') // Ambil id_pengajuan dari pm_penutupan
             ->join('users', 'pengajuans.id_user', '=', 'users.id') // Join ke tabel users
             ->select(
+                'pembayarans.id',
                 'users.nama as nama',
-                'pm_penutupan.nomor_polis as nomor_polis',
+                'pm_penutupan.ref_penutupan as ref_penutupan',
                 'pengajuans.plan',
                 'pengajuans.premi',
                 'pengajuans.created_at as tanggal_pengajuan',

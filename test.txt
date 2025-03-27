@@ -409,11 +409,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
 pengajuan->updateSnk
 kirim email
-isi: nomor polis, produk, paket, periode paket, periode asuransi, premi.
+isi: No Referensi, produk, paket, periode paket, periode asuransi, premi.
 (berarti setelah setuju, sistem membuat tabel polis
     isinya:
     - id_pengajuan
-    - nomor polis
+    - No Referensi
     - produk
     - paket
     - periode paket

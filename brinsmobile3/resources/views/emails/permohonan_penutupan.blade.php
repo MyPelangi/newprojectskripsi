@@ -20,29 +20,31 @@
             <br>
             <h2>Hai,</h2>
             <p>Satu langkah lagi untuk mendapatkan proteksimu!</p>
-            <p>Surat Permintaan Penutupan Asuransi Anda dengan Ref No. {{ $permohonan->nomor_polis }} melalui Aplikasi BRINSmobile telah kami terima.</p>
+            <p>Surat Permintaan Penutupan Asuransi Anda dengan Ref No. {{ $permohonan->ref_penutupan }} melalui Aplikasi BRINSmobile telah kami terima.</p>
             <p>Berikut adalah detail proteksi yang Anda pilih:</p>
 
                 <div class="card">
-                    <div class="email-content-split">
-                        <div class="field">
-                            <p>Produk</p>
-                            <p>Paket</p>
-                            <p>Periode Paket</p>
-                            <p>Periode Asuransi</p>
-                            <p>Nilai Pertanggungan</p>
-                            <p>Premi</p>
-                        </div>
-                        <div class="value">
-                            <p>{{ $permohonan->produk }}</p>
-                            <p>{{ $permohonan->paket }}</p>
-                            <p>{{ $permohonan->periode_paket }}</p>
-                            <p>{{ $permohonan->tanggal_berlaku->format('d-m-Y') }}</p>
-                            <p>{{ $permohonan->tanggal_berakhir->format('d-m-Y') }}</p>
-                            <p>Rp {{ number_format($permohonan->nilai_pertanggungan, 0, ',', '.') }}</p>
-                            <p>Rp {{ number_format($permohonan->premi, 0, ',', '.') }}</p>
-                        </div>
-                    </div>
+                    <table width="100%">
+                        <tr>
+                            <td width="50%">
+                                <p>Produk</p>
+                                <p>Paket</p>
+                                <p>Periode Paket</p>
+                                <p>Periode Asuransi</p>
+                                <p>Nilai Pertanggungan</p>
+                                <p>Premi</p>
+                            </td>
+                            <td width="50%">
+                                <p>{{ $permohonan->produk }}</p>
+                                <p>{{ $permohonan->paket }}</p>
+                                <p>{{ $permohonan->periode_paket }}</p>
+                                <p>{{ $permohonan->tanggal_berlaku->format('d-m-Y') }}</p>
+                                <p>{{ $permohonan->tanggal_berakhir->format('d-m-Y') }}</p>
+                                <p>Rp {{ number_format($permohonan->nilai_pertanggungan, 0, ',', '.') }}</p>
+                                <p>Rp {{ number_format($permohonan->premi, 0, ',', '.') }}</p>
+                            </td>
+                        </tr>
+                    </table>
                 </div>
             <a class="email-button" href="{{ route('checkout') }}">Lanjutkan ke Pembayaran</a>
             <p>Untuk mengaktifkan polis, Anda bisa langsung klik tombol "Lanjutkan ke Pembayaran" di atas atau dengan masuk ke menu <b>Keranjang (Menunggu Pembayaran)</b> yang tersedia di Aplikasi BRINSmobile.</p>

@@ -23,8 +23,8 @@ class PembayaransDataTable extends DataTable
     {
         return (new EloquentDataTable($query))
             ->addIndexColumn()
-            ->addColumn('nomor_polis', function ($pembayaran) {
-                return $pembayaran->penutupan->nomor_polis ?? '-'; // Ambil dari relasi penutupan
+            ->addColumn('ref_penutupan', function ($pembayaran) {
+                return $pembayaran->penutupan->ref_penutupan ?? '-'; // Ambil dari relasi penutupan
             })
             ->addColumn('produk', function ($pembayaran) {
                 return $pembayaran->penutupan->produk ?? '-'; // Ambil dari relasi penutupan
@@ -36,9 +36,9 @@ class PembayaransDataTable extends DataTable
                 return Carbon::parse($pembayaran->created_at)->translatedFormat('d F Y'); // Format tanggal
             })
             ->setRowId('id')
-            ->filterColumn('nomor_polis', function ($query, $keyword) {
+            ->filterColumn('ref_penutupan', function ($query, $keyword) {
                 $query->whereHas('penutupan', function ($q) use ($keyword) {
-                    $q->where('nomor_polis', 'like', "%$keyword%");
+                    $q->where('ref_penutupan', 'like', "%$keyword%");
                 });
             });
     }
@@ -89,7 +89,7 @@ class PembayaransDataTable extends DataTable
             Column::make('DT_RowIndex')->title('No')->searchable(false)->orderable(false),
             Column::make('created_at')->title('Tanggal Pengajuan')->searchable(true),
             Column::make('produk')->title('Produk'),
-            Column::make('nomor_polis')->title('Nomor Polis')->searchable(true),
+            Column::make('ref_penutupan')->title('No Referensi')->searchable(true),
             Column::make('paket')->title('Paket'),
             Column::make('total')->title('Total'),
             Column::make('status')->title('Status')

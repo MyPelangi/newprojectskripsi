@@ -19,6 +19,12 @@ use App\Http\Controllers\FlaskPredictionController;
 | contains the "web" middleware group. Now create something great!
 |
 */
+Route::get('/cover_note', function () {
+    return view('pdf/cover_note');
+});
+Route::get('/epolis', function () {
+    return view('pdf/e_polis');
+});
 
 Route::middleware('auth')->group(function () {
     Route::get('/home', function () {
@@ -27,6 +33,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/product', function () {
         return view('pages/produk');
     });
+
     Route::get('/polis', [PolisController::class, 'index']);
     Route::get('/keranjang', [PengajuanController::class, 'keranjang']);
     Route::get('/profil', [SessionController::class, 'profil']);
@@ -43,6 +50,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/getPengajuan/{id}', [PengajuanController::class, 'getPengajuan'])->name('pengajuan.edit');
     Route::post('/updatePengajuan', [PengajuanController::class, 'updatePengajuan']);
 
+    Route::post('/konfirmasi-pembayaran/{id}', [PembayaranController::class, 'konfirmasiPembayaran']);
     Route::post('/logout', [SessionController::class, 'logout'])->name('logout');
 });
 
@@ -59,6 +67,7 @@ Route::prefix('admin')->group(function () {
         Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
         Route::get('/pengajuanpolis', [AdminController::class, 'pengajuanPolis'])->name('admin.pengajuanpolis');
         Route::get('/prediksi', [AdminController::class, 'prediksi'])->name('admin.prediksi');
+        Route::get('/detail/{id}', [AdminController::class, 'show'])->name('detail.show');
         Route::post('/logout', [AdminController::class, 'logout'])->name('admin.logout');
     });
 });

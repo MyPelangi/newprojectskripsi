@@ -3,6 +3,7 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Models\Polis;
 use App\Models\Pengajuans;
 use App\Models\Pembayarans;
 use Laravel\Sanctum\HasApiTokens;
@@ -73,5 +74,10 @@ class User extends Authenticatable
     public function pembayarans()
     {
         return $this->hasMany(Pembayarans::class, 'id_user');
+    }
+
+    public function polis()
+    {
+        return $this->hasMany(Polis::class, 'id_user');
     }
 }

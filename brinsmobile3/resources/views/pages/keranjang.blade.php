@@ -49,7 +49,7 @@
                 <tr>
                     <th scope="col"></th>
                     <th scope="col">Nama</th>
-                    <th scope="col">Nomor Polis</th>
+                    <th scope="col">No Referensi</th>
                     <th scope="col">Paket</th>
                     <th scope="col">Premi</th>
                     <th scope="col">Tanggal Pengajuan</th>
@@ -58,7 +58,7 @@
             </thead>
             <tbody>
                 @foreach($pembayarans as $pembayaran)
-                <tr>
+                <tr class="clickable-row" data-href="{{ route('pembayaran.show', ['id' => $pembayaran->id]) }}">
                     <th>
                         <div class="polis-items">
                             <img src="/img/logo_produk/sepeda.png" alt="" class="polis-icon">
@@ -66,7 +66,7 @@
                         </div>
                     </th>
                     <td><b>{{ $pembayaran->nama }}</b></td>
-                    <td>{{ $pembayaran->nomor_polis }}</td>
+                    <td>{{ $pembayaran->ref_penutupan }}</td>
                     <td>{{ $pembayaran->plan }}</td>
                     <td>Rp {{ number_format($pembayaran->premi, 0, ',', '.') }}</td>
                     <td>{{ \Carbon\Carbon::parse($pembayaran->tanggal_pengajuan)->format('d M Y') }}</td>

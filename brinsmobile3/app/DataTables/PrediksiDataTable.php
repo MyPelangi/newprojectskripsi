@@ -88,7 +88,7 @@ class PrediksiDataTable extends DataTable
     public function getColumns(): array
     {
         return [
-            Column::make('created_at')->title('Tanggal Prediksi'), // Ganti nama kolom
+            Column::make('created_at')->title('Tanggal'), // Ganti nama kolom
             Column::make('jenis_gambar')->title('Jenis Gambar'),
             Column::make('front_wheel_confidence')->title('Front Wheel'),
             Column::make('handlebar_confidence')->title('Handlebar'),

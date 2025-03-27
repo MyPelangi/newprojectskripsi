@@ -14,7 +14,7 @@ class PermohonanPenutupan extends Model
 
     protected $fillable = [
         'id_pengajuan',
-        'nomor_polis',
+        'ref_penutupan',
         'produk',
         'paket',
         'periode_paket',
