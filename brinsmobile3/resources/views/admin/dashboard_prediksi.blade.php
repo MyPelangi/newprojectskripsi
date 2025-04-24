@@ -6,7 +6,7 @@
 <div class="container dashboard-container">
     <div class="info-container">
         <div class="total-container">
-            <div class="card total-chart-card shadow-sm">
+            <div class="card total-card shadow-sm">
                 <div class="card-content">
                     <h4><b>Tingkat Akurasi Prediksi</b></h4>
                     <div class="chart-container">
@@ -25,7 +25,7 @@
                     </div>
                 </div>
             </div>
-            <div class="card total-chart-card shadow-sm">
+            <div class="card total-card shadow-sm">
                 <h4><b>Total Prediksi</b></h4>
                 <div class="chart-container">
                     <div class="chart-labels">
@@ -41,10 +41,10 @@
             </div>
         </div>
         <div class="chart-content">
-            <div class="card">
+            <div class="card total-card">
                 <canvas id="accuracyChart"></canvas>
-            </div><br>
-            <div class="card">
+            </div>
+            <div class="card total-card">
                 <canvas id="myChart"></canvas>
             </div>
         </div>

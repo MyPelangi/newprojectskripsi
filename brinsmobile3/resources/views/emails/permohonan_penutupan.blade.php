@@ -46,10 +46,7 @@
                         </tr>
                     </table>
                 </div>
-            <a class="email-button" href="{{ route('checkout') }}">Lanjutkan ke Pembayaran</a>
-            <p>Untuk mengaktifkan polis, Anda bisa langsung klik tombol "Lanjutkan ke Pembayaran" di atas atau dengan masuk ke menu <b>Keranjang (Menunggu Pembayaran)</b> yang tersedia di Aplikasi BRINSmobile.</p>
-
-            <p>Permohonanmu akan otomatis dibatalkan apabile tidak melakukan pembayaran. Jika membutuhkan bantuan silahkan hubungi kami di 14081</p>
+            <p>Pengajuan polis anda sedang ditinjau oleh admin. Hasil peninjauan akan dikirim melalui email dalam 24 jam.</p>
         </div>
     </div>
 </body>

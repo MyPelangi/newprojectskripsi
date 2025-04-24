@@ -26,7 +26,7 @@ class Pembayarans extends Model
 
     public function user()
     {
-        return $this->hasMany(User::class);
+        return $this->hasMany(User::class, 'id');
     }
 
     public function penutupan()

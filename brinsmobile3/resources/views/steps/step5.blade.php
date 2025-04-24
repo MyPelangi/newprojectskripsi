@@ -70,7 +70,4 @@
         </div>
     </div>
     <button type="button" id="submit-form" class="btn upload-button" onclick="nextStep()">Lanjutkan</button>
-
-    <h3>Prediction Results:</h3>
-    <pre id="result"></pre>
 </div>

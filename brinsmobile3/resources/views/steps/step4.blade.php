@@ -13,10 +13,11 @@
         <div class="input-text">
             <label>Tipe Sepeda*</label>
             @if(isset($tipesepeda) && count($tipesepeda) > 0)
-                <select id="tipesepeda" name="tipe_sepeda" value="{{ $pengajuan->tipe_sepeda ?? '' }}" class="text-box">
+                <select id="tipesepeda" name="tipe_sepeda" class="text-box">
                     <option value="">Pilih tipe sepeda anda</option>
                     @foreach ($tipesepeda as $tipe)
-                        <option value="{{ $tipe->id }}" {{ old('tipe_sepeda') == $tipe->id ? 'selected' : '' }}>
+                        <option value="{{ $tipe->id }}"
+                            {{ (old('tipe_sepeda', $pengajuan->tipe_sepeda ?? '') == $tipe->id) ? 'selected' : '' }}>
                             {{ $tipe->tipe_sepeda }}
                         </option>
                     @endforeach
@@ -35,11 +36,11 @@
         </div>
         <div class="input-text">
             <label>Tahun Produksi Sepeda*</label>
-            <select id="tahunproduksi" name="tahun_produksi" value="{{ $pengajuan->tahun_produksi ?? '' }}" class="text-box">
+            <select id="tahunproduksi" name="tahun_produksi" class="text-box">
                 <option value="">Pilih tahun produksi sepeda anda</option>
-                <option value="2025">2025</option>
-                <option value="2024">2024</option>
-                <option value="2023">2023</option>
+                <option value="2025" {{ old('tahun_produksi', $pengajuan->tahun_produksi ?? '') == '2025' ? 'selected' : '' }}>2025</option>
+                <option value="2024" {{ old('tahun_produksi', $pengajuan->tahun_produksi ?? '') == '2024' ? 'selected' : '' }}>2024</option>
+                <option value="2023" {{ old('tahun_produksi', $pengajuan->tahun_produksi ?? '') == '2023' ? 'selected' : '' }}>2023</option>
             </select>
         </div>
         <div class="input-text">

@@ -313,10 +313,27 @@ class PengajuanController extends Controller
                 'users.nama as nama',
                 'pengajuans.plan',
                 'pengajuans.premi',
-                'pengajuans.created_at'
+                'pengajuans.created_at',
+                'pengajuans.status'
             )
             ->join('users', 'pengajuans.id_user', '=', 'users.id') // Join ke tabel users
-            ->where('pengajuans.status', null) // Status kosong sesuai dengan draft
+            ->where('pengajuans.status', 'pending_ocr') // Status kosong sesuai dengan draft
+            ->where('pengajuans.id_user', $userId) // Filter hanya untuk user yang login
+            ->orderByDesc('pengajuans.created_at')
+            ->get();
+
+        $permohonan = PermohonanPenutupan::join('pengajuans', 'pm_penutupan.id_pengajuan', '=', 'pengajuans.id') // Ambil id_pengajuan dari pm_penutupan
+        ->join('users', 'pengajuans.id_user', '=', 'users.id')
+        ->select(
+                'pengajuans.id',
+                'users.nama as nama',
+                'pm_penutupan.ref_penutupan',
+                'pm_penutupan.paket',
+                'pm_penutupan.premi',
+                'pm_penutupan.created_at',
+                'pm_penutupan.status_permohonan'
+            )
+            ->where('pm_penutupan.status_permohonan', 'pending') // Status kosong sesuai dengan draft
             ->where('pengajuans.id_user', $userId) // Filter hanya untuk user yang login
             ->orderByDesc('pengajuans.created_at')
             ->get();
@@ -339,7 +356,7 @@ class PengajuanController extends Controller
             ->orderByDesc('pengajuans.created_at')
             ->get();
 
-        return view('pages/keranjang', compact('pengajuans', 'pembayarans'));
+        return view('pages/keranjang', compact('pengajuans','permohonan', 'pembayarans'));
     }
 
 

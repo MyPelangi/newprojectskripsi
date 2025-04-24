@@ -9,6 +9,16 @@
     <div class="row product-container">
         <div class="col product shadow">
             <div class="products-title">
+                <img src="img/logo_produk/sepeda.png" alt="">
+                <b>SEPEDA</b>
+            </div>
+            <div class="products-desc">
+                <p>BRINS Sepeda adalah perlindungan yang memberikan ganti rugi kepada tertanggung terhadap kerugian atas dan/atau kerusakan pada sepeda dan/atau kepentingan yang diasuransikan.</p>
+            </div>
+            <a href="/product/sepeda/pengajuan" class="btn products-button">Beli</a>
+        </div>
+        <div class="col product shadow">
+            <div class="products-title">
                 <img src="img/logo_produk/oto.png" alt="">
                 <b>OTO</b>
             </div>
@@ -36,16 +46,6 @@
                 <p>Melindungi diri Anda dari risiko tidak terduga yang diakibatkan oleh kecelakaan (yaitu: meninggal dunia, cacat tetap total atau cacat tetap sebagian dan biaya pengobatan).</p>
             </div>
             <a href="" class="btn products-button">Beli</a>
-        </div>
-        <div class="col product shadow">
-            <div class="products-title">
-                <img src="img/logo_produk/sepeda.png" alt="">
-                <b>SEPEDA</b>
-            </div>
-            <div class="products-desc">
-                <p>BRINS Sepeda adalah perlindungan yang memberikan ganti rugi kepada tertanggung terhadap kerugian atas dan/atau kerusakan pada sepeda dan/atau kepentingan yang diasuransikan.</p>
-            </div>
-            <a href="/product/sepeda/pengajuan" class="btn products-button">Beli</a>
         </div>
     </div>
 

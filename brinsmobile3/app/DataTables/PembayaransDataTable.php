@@ -26,6 +26,9 @@ class PembayaransDataTable extends DataTable
             ->addColumn('ref_penutupan', function ($pembayaran) {
                 return $pembayaran->penutupan->ref_penutupan ?? '-'; // Ambil dari relasi penutupan
             })
+            ->addColumn('nama_user', function ($pembayaran) {
+                return $pembayaran->penutupan->pengajuan->user->nama ?? '-'; // Menampilkan nama atau "-" jika null
+            })
             ->addColumn('produk', function ($pembayaran) {
                 return $pembayaran->penutupan->produk ?? '-'; // Ambil dari relasi penutupan
             })
@@ -36,10 +39,13 @@ class PembayaransDataTable extends DataTable
                 return Carbon::parse($pembayaran->created_at)->translatedFormat('d F Y'); // Format tanggal
             })
             ->setRowId('id')
-            ->filterColumn('ref_penutupan', function ($query, $keyword) {
-                $query->whereHas('penutupan', function ($q) use ($keyword) {
-                    $q->where('ref_penutupan', 'like', "%$keyword%");
+            ->filterColumn('nama_user', function ($query, $keyword) {
+                $query->whereHas('penutupan.pengajuan.user', function ($q) use ($keyword) {
+                    $q->where('nama', 'like', "%$keyword%");
                 });
+            })
+            ->filterColumn('created_at', function ($query, $keyword) {
+                $query->whereDate('created_at', $keyword);
             });
     }
 
@@ -51,8 +57,10 @@ class PembayaransDataTable extends DataTable
      */
     public function query(Pembayarans $model): QueryBuilder
     {
-        return $model->newQuery()->with('penutupan')->whereHas('penutupan')->orderByDesc('created_at');
-    }
+        return $model->newQuery()
+        ->with(['penutupan', 'user']) // ← tambahkan user di sini
+        ->whereHas('penutupan')
+        ->orderByDesc('created_at');    }
 
 
     /**
@@ -87,7 +95,8 @@ class PembayaransDataTable extends DataTable
     {
         return [
             Column::make('DT_RowIndex')->title('No')->searchable(false)->orderable(false),
-            Column::make('created_at')->title('Tanggal Pengajuan')->searchable(true),
+            Column::make('created_at')->title('Tanggal')->searchable(true),
+            Column::make('nama_user')->title('Nama'),
             Column::make('produk')->title('Produk'),
             Column::make('ref_penutupan')->title('No Referensi')->searchable(true),
             Column::make('paket')->title('Paket'),

@@ -10,12 +10,34 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 document.addEventListener("DOMContentLoaded", function () {
-    let sidebarItems = document.querySelectorAll(".sidebar-items a");
+    let sidebarItems = document.querySelectorAll(".sidebar-items");
 
     sidebarItems.forEach(item => {
         if (item.href === window.location.href) {
             item.parentElement.classList.add("active");
         }
+    });
+});
+
+
+document.addEventListener("DOMContentLoaded", function () {
+    $(document).ready(function () {
+
+        var table = $('#permohonanpenutupan-table').DataTable();
+
+        // Trigger search saat klik tombol Search
+        $('.filter-button').first().on('click', function () {
+            table.column(5).search($('#searchStatus').val());
+            table.column(1).search($('#searchTanggalPengajuan').val());
+            table.draw();
+        });
+
+        // Tombol Reset
+        $('.filter-button').last().on('click', function () {
+            $('#searchTanggalPengajuan').val('');
+            $('#searchStatus').val('');
+            table.search('').columns().search('').draw();
+        });
     });
 });
 
@@ -61,6 +83,27 @@ document.addEventListener("DOMContentLoaded", function () {
 document.addEventListener("DOMContentLoaded", function () {
     $(document).ready(function () {
         let table = $('#pembayarans-table').DataTable();
+
+        // Event saat tombol "Search" ditekan
+        $('.filter-button').eq(0).on('click', function () {
+            let namaUser = $('#searchNamaUser').val();
+            let tanggalPengajuan = $('#searchTanggalPengajuan').val();
+
+            // Terapkan filter DataTables
+            table.column(2).search(namaUser); // Kolom ke-1 = Nama User
+            table.column(1).search(tanggalPengajuan); // Kolom ke-5 = Tanggal Pengajuan
+
+            table.draw();
+        });
+
+        // Event saat tombol "Reset" ditekan
+        $('.filter-button').eq(1).on('click', function () {
+            $('#searchNamaUser').val('');
+            $('#searchTanggalPengajuan').val('');
+
+            // Reset filter DataTables
+            table.search('').columns().search('').draw();
+        });
 
         $('#pembayarans-table tbody').on('click', 'tr', function() {
             let data = table.row(this).data();

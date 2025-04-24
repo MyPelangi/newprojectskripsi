@@ -16,8 +16,7 @@
                 </div>
             </div>
             <br>
-            <p><b>Hai Sobat BRINS,</b></p>
-            <p>Terima Kasih atas pembayaran yang dilakukan untuk proteksimu!</p>
+            
             <p>Pembayaran Pembelian Penutupan Asuransi Anda dengan Ref No. {{ $penutupan->ref_penutupan }} melalui Aplikasi BRINSMobile telah kami terima. </p>
             <p>Berikut adalah detail proteksi yang Anda pilih:</p>
 

@@ -32,7 +32,7 @@ class PermohonanPenutupanMail extends Mailable
     public function envelope()
     {
         return new Envelope(
-            subject: 'Permohonan Penutupan Asuransi',
+            subject: 'Surat Permohonan Penutupan Asuransi',
         );
     }
 

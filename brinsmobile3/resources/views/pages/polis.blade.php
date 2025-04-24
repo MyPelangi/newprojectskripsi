@@ -38,11 +38,11 @@
                                 <b class="polis-label">SEPEDA</b>
                             </div>
                         </th>
-                        <td>{{ $item->nomor_polis }}</td>
+                        <td class="nomor_polis">{{ $item->nomor_polis }}</td>
                         <td>{{ $item->paket }}</td>
                         <td>Rp {{ number_format($item->premi, 0, ',', '.') }}</td>
                         <td>{{ $item->periode_asuransi }}</td>
-                        <td>Aktif</td>
+                        <td><p class="status_polis">Aktif</p></td>
                     </tr>
                 @endforeach
                 </tbody>

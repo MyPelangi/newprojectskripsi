@@ -1,3 +1,4 @@
+// show and hidden password
 document.addEventListener("DOMContentLoaded", function () {
     $(document).on("click", ".passwordshow", function () {
         const input = $(this).siblings(".form-control").length
@@ -9,6 +10,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 });
 
+// change step in register
 document.addEventListener("DOMContentLoaded", function () {
     const sections = document.querySelectorAll(".register-section");
     const steps = document.querySelectorAll(".register-step .section");
@@ -33,6 +35,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 });
 
+// change step in polis menu
 document.addEventListener("DOMContentLoaded", function () {
     const sections = document.querySelectorAll(".polis-section");
     const steps = document.querySelectorAll(".register-step .section");
@@ -57,6 +60,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 });
 
+// change step in keranjang menu
 document.addEventListener("DOMContentLoaded", function () {
     const sections = document.querySelectorAll(".keranjang-section");
     const steps = document.querySelectorAll(".register-step .section");
@@ -81,6 +85,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 });
 
+// show detail transaksi di step 6
 document.addEventListener("DOMContentLoaded", function () {
     let button = document.querySelector(".showtransaksi");
     let detailDiv = document.getElementById("showdetail");
@@ -104,6 +109,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 });
 
+// pilih metode pembayaran di halaman checkout
 document.addEventListener("DOMContentLoaded", function () {
 
     let selectedMethod = null;
@@ -143,7 +149,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 });
 
-
+// pengaturan step di pengajuan
 document.addEventListener("DOMContentLoaded", function () {
     let currentStep = 1;
 
@@ -240,7 +246,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 });
 
-
+// membuat baris di tabel dapat di klik
 document.addEventListener("DOMContentLoaded", function () {
     const rows = document.querySelectorAll(".clickable-row");
     rows.forEach(row => {
@@ -250,6 +256,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 });
 
+// untuk mengambil data pengajuan saat memilih baris di keranjang
 async function loadData(idPengajuan) {
     try {
         let response = await fetch(`/getPengajuan/${idPengajuan}`);
@@ -283,7 +290,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 });
 
-
+// untuk mengganti paket di step 3
 document.addEventListener("DOMContentLoaded", function () {
     const plans = {
         Silver: {
@@ -366,7 +373,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 });
 
-
+// untuk menampilkan gambar di step 5
 function setupImagePreview(inputId, previewId) {
     const inputElement = document.getElementById(inputId);
     const previewImage = document.getElementById(previewId);
@@ -409,6 +416,7 @@ imageInputs.forEach(({ inputId, previewId }) => {
     setupImagePreview(inputId, previewId);
 });
 
+// fungsi utama pengajuan
 document.addEventListener("DOMContentLoaded", function () {
     let idPengajuan = null; // Simpan ID pengajuan setelah dibuat pertama kali
 
@@ -850,7 +858,7 @@ document.addEventListener("DOMContentLoaded", function () {
         prediksiHTML += `
             <div class="document-container">
                 <p>KTP</p>
-                <p>${pathKtp}</p>
+                <p>${pathKtp.replace('uploads/', '')}</p>
                 <div class="badge-${statusOCR === "valid" ? "sukses" : "gagal"}">${statusOCR}</div>
             </div>
             <div class="hl"></div>
@@ -860,7 +868,7 @@ document.addEventListener("DOMContentLoaded", function () {
         prediksiHTML += `
             <div class="document-container">
                 <p>Invoice</p>
-                <p>${pathInvoice}</p>
+                <p>${pathInvoice.replace('uploads/', '')}</p>
                 <div class="badge-${statusOCR === "valid" ? "sukses" : "gagal"}">${statusOCR}</div>
             </div>
             <div class="hl"></div>
@@ -874,7 +882,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 prediksiHTML += `
                     <div class="document-container">
                         <p>${posisi}</p>
-                        <p>${pathGambar}</p>
+                        <p>${pathGambar.replace('uploads/', '')}</p>
                         <div class="badge-sukses">${prediksiPosisi.status} </div>
                     </div>
                     <div class="hl"></div>
@@ -914,7 +922,7 @@ document.addEventListener("DOMContentLoaded", function () {
         .then(data => {
             if (data.success) {
                 buatPermohonanPenutupan(idPengajuan);
-                window.location.href = "/checkout"; // Redirect ke halaman checkout
+                window.location.href = "/keranjang"; // Redirect ke halaman keranjang
             } else {
                 alert("Gagal menyimpan persetujuan. Coba lagi!");
             }

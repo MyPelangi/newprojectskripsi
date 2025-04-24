@@ -66,6 +66,7 @@ class PembayaranController extends Controller
 
     public function konfirmasiPembayaran(Request $request, $id)
     {
+        $polis = Polis::where('id_user', auth()->id())->get();
         set_time_limit(300);
         $user = auth()->user();
 
@@ -151,7 +152,7 @@ class PembayaranController extends Controller
         $pembayaran->status = 'lunas'; // Tandai pembayaran sebagai valid
         $pembayaran->save();
 
-        return view('pages.polis');
+        return view ('/pages/home');
     }
 
 

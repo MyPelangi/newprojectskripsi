@@ -3,9 +3,18 @@
         <img src="/img/logowhite1.png" alt="">
     </a>
     <ul>
-        <li class="sidebar-items {{ Request::routeIs('admin.dashboard') ? 'active' : '' }}"><a href="{{ route('admin.dashboard') }}">Dashboard</a></li>
-        <li class="sidebar-items {{ Request::routeIs('admin.pengajuanpolis') ? 'active' : '' }}"><a href="{{ route('admin.pengajuanpolis') }}">Pengajuan Polis</a></li>
-        <li class="sidebar-items {{ Request::routeIs('admin.prediksi') ? 'active' : '' }}"><a href="{{ route('admin.prediksi') }}">Prediksi</a></li>
+        <li class="sidebar-items {{ Request::routeIs('admin.dashboard') ? 'active' : '' }}">
+            <a href="{{ route('admin.dashboard') }}">Dashboard</a>
+        </li>
+        <li class="sidebar-items {{ Request::routeIs('admin.pm_penutupan') ? 'active' : '' }}">
+            <a href="{{ route('admin.pm_penutupan') }}">Approval</a>
+        </li>
+        <li class="sidebar-items {{ Request::routeIs('admin.pengajuanpolis') ? 'active' : '' }}">
+            <a href="{{ route('admin.pengajuanpolis') }}">Penutupan Polis</a>
+        </li>
+        <li class="sidebar-items {{ Request::routeIs('admin.prediksi') ? 'active' : '' }}">
+            <a href="{{ route('admin.prediksi') }}">Prediksi</a>
+        </li>
         <li class="sidebar-items">
             <a href="{{ route('admin.logout') }}"
                onclick="event.preventDefault(); document.getElementById('logout-form').submit();">

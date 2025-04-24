@@ -33,11 +33,11 @@
                 </div>
                 <div class="detail-container">
                     <p>Tanggal lahir</p>
-                    <p><b>{{ Auth::user()->tgl_lahir }}</b></p>
+                    <p><b>{{ \Carbon\Carbon::parse(Auth::user()->tgl_lahir)->translatedFormat('d F Y') }}</b></p>
                 </div>
                 <div class="detail-container">
                     <p>Rata-rata pendapatan per tahun</p>
-                    <p><b>{{ Auth::user()->pendapatan_tahunan }}</b></p>
+                    <p><b>Rp{{ number_format(Auth::user()->pendapatan_tahunan, 0, ',', '.') }}</b></p>
                 </div>
                 <div class="detail-container">
                     <p>Nomor KTP</p>

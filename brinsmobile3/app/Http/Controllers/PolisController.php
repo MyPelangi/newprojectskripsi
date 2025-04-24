@@ -12,6 +12,4 @@ class PolisController extends Controller
         $polis = Polis::all();
         return view ('/pages/polis', compact('polis'));
     }
-
-
 }

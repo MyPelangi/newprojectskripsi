@@ -65,8 +65,13 @@ Route::prefix('admin')->group(function () {
 
     Route::middleware(['admin'])->group(function () {
         Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
+        Route::get('/permohonanpenutupanpolis', [AdminController::class, 'permohonanpenutupan'])->name('admin.pm_penutupan');
+        Route::post('/penutupan/{id}', [AdminController::class, 'action'])->name('penutupan.action');
+        Route::post('/penutupan/{id}/approve', [AdminController::class, 'approve'])->name('penutupan.approve');
+        Route::post('/penutupan/{id}/reject', [AdminController::class, 'reject'])->name('penutupan.reject');
         Route::get('/pengajuanpolis', [AdminController::class, 'pengajuanPolis'])->name('admin.pengajuanpolis');
         Route::get('/prediksi', [AdminController::class, 'prediksi'])->name('admin.prediksi');
+        Route::get('/permohonanpenutupanpolis/detail/{id}', [AdminController::class, 'show'])->name('detail.show');
         Route::get('/detail/{id}', [AdminController::class, 'show'])->name('detail.show');
         Route::post('/logout', [AdminController::class, 'logout'])->name('admin.logout');
     });
